@@ -3,7 +3,7 @@ import unittest
 from assigner.scientific_score import score
 
 
-class ScoreStrategyTest(unittest.TestCase):
+class ScientificScoreTest(unittest.TestCase):
     def test_destination_even_no_common_factors(self):
         got = score("don", "1st street")
         # number of vowels in juan is 1

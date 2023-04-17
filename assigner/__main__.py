@@ -1,8 +1,8 @@
 import sys
 
 from assigner.file_utils import read_as_list
-from assigner.shipment_assigner import ShipmentAssigner
 from assigner.scientific_score import score as scientific_score
+from assigner.shipment_assigner import ShipmentAssigner
 
 
 def main(drivers_file: str, shipments_file: str):

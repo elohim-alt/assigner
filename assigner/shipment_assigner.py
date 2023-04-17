@@ -1,18 +1,15 @@
-import sys
-from typing import List, Tuple
+from typing import Callable,List, Tuple
 
 from munkres import Munkres
-
-from assigner.assign_strategy import AssignStrategy
 
 # in order to have a score higher than this, driver name should have a few thousand letters
 MAX_PAIR_SCORE = 10000
 
 
-class ShipmentAssigner(AssignStrategy):
+class ShipmentAssigner:
     """ShipmentAssigner is a class that assigns drivers to shipments using the Hungarian/Munkres algorithm."""
 
-    def __init__(self, score_strategy):
+    def __init__(self, score_strategy: Callable[[str, str], int]):
         self.score_strategy = score_strategy
 
     def assign(self, drivers: List[str], shipments: List[str]) -> Tuple[int, List[Tuple[str, str]]]:
@@ -33,11 +30,11 @@ class ShipmentAssigner(AssignStrategy):
 
         m = Munkres()
         indexes = m.compute(cost_matrix)
-        assignments, total = self._build_pairs(drivers, indexes, matrix, shipments)
+        assignments, total = self._build_pairs(drivers, shipments, indexes, matrix)
 
         return total, assignments
 
-    def _build_pairs(self, drivers, indexes, matrix, shipments):
+    def _build_pairs(self, drivers: List[str], shipments: List[str], indexes: List[Tuple[int, int]], matrix: List[List[int]]) -> Tuple[List[Tuple[str, str]], int]:
         total = 0
         assignments = []
         for row, column in indexes:
@@ -46,7 +43,9 @@ class ShipmentAssigner(AssignStrategy):
             assignments += [(drivers[row], shipments[column])]
         return assignments, total
 
-    def _prepare_matrix(self, matrix):
+    # The library that we use just calculates the minimum cost,
+    # we need to invert the scores to get the maximum profit (score)
+    def _prepare_matrix(self, matrix: List[List[int]]) -> List[List[int]]:
         cost_matrix = []
         for row in matrix:
             cost_row = []
