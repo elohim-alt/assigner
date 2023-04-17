@@ -1,3 +1,6 @@
+import math
+
+
 def _count_vowels(word: str) -> int:
     return sum(1 for c in word.lower() if c in "aeiou")
 
@@ -6,12 +9,10 @@ def _count_consonants(word: str) -> int:
     return sum(1 for c in word.lower() if c in "bcdfghjklmnpqrstvwxyz")
 
 
-# We determine if the numbers have common factors by using the Euclidean algorithm
+# We determine if the numbers have common factors by using python built in gcd.
+# This internally uses the  Euclidean algorithm so complexity is O(log(min(a,b)))
 def _has_common_factors(num1: int, num2: int):
-    for i in range(2, min(num1, num2) + 1):
-        if num1 % i == 0 and num2 % i == 0:
-            return True
-    return False
+    return math.gcd(num1, num2) > 1
 
 
 def score(driver: str, shipment: str) -> float:
